@@ -153,12 +153,17 @@ button:hover {
 	padding: 0.5rem;
 }
 
+.submit-error {
+	color: #D3343E;
+	font-size: 1.15rem;
+	margin: 1.25em 0 .5em;
+}
+
 .success-message {
 	display: flex;
 	flex-flow: column;
 	font-size: 1.25rem;
 	margin: 1.25em 0 .5em;
-
 }
 
 .small-message {

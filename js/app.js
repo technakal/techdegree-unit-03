@@ -39,17 +39,17 @@ $('document').ready(function() {
   $('#design').on('change', () => setShirtDesign());
   $('.activities').on('change', event => selectActivity(event.target));
   $('#payment').on('change', event => selectPaymentType(event));
-  $('#cc-num').attr('maxlength', 19).on('keyup blur', (event) => {
+  $('#cc-num').attr('maxlength', 19).on('blur keyup', (event) => {
     if(event.keyCode !== 9) {
       validateCreditCard()
     }
   });
-  $('#zip').on('keyup blur', (event) => {
+  $('#zip').on('blur keyup', (event) => {
     if(event.keyCode !== 9) {
       validateZipCode()
     }
   });
-  $('#cvv').attr('maxlength', 3).on('keyup blur', (event) => {
+  $('#cvv').attr('maxlength', 3).on('blur keyup', (event) => {
     if(event.keyCode !== 9) {
       validateCVV()
     }
@@ -322,6 +322,35 @@ const validateCVV = () => {
   return isValid;
 }
 
+/**
+ * Verifies that the credit card is not expired.
+ * Returns boolean.
+ */
+const validateExpirationDate = () => {
+  const { isEmpty, hasError } = runCommonValidation('exp-year');
+  const d = new Date();
+  const today = {
+    year: d.getFullYear(),
+    month: d.getMonth() + 1,
+  }
+
+  const expYear = $('#exp-year').val();
+  const expMonth = $('#exp-month').val();
+  
+  if(expYear < today.year) {
+    displayError('exp-year', `Your card is expired.`, hasError);
+    return false;
+  }
+  if(expYear == today.year) {
+    if(expMonth < today.month) {
+      displayError('exp-year', `Your card is expired.`, hasError);
+      return false;
+    }
+  }
+  removeError('exp-year');
+  return true;
+}
+
 /*****************************************
  VALIDATION HELPERS
 *****************************************/
@@ -433,18 +462,44 @@ const submitForm = event => {
     entryIsValid.ccNumValid = validateCreditCard();
     entryIsValid.zipCodeValid = validateZipCode();
     entryIsValid.cvvValid = validateCVV();
+    entryIsValid.expDateValid = validateExpirationDate();
   }
 
+  // Pull the validatino list and determine how inputs failed validation.
+  const entries = Object.values(entryIsValid);
+  let numberOfErrors = 0;
+  for (const entry of entries) {
+    if(!entry) {
+      numberOfErrors++;
+    }
+  }
+
+  // display the number of errors so they user knows what's happening (in case an error is off-screen).
+  displaySubmitError(numberOfErrors);
+
+  // if there are no errors, process submission.
   if(!Object.values(entryIsValid).includes(false)) {
+    if($('.submit-error').length > 0) {
+      $('.submit-error').remove();
+    }
     displaySuccess();
     setTimeout(function() {
       $('.success-message').remove();
       $('#total-price').remove();
       $('#other-title-group').hide();
+      $('#design').prepend('<option value="default">Select Theme</option>');
+      $('#design option[value=default]').attr('selected', true);
       $('#shirt-colors').hide().find('#color').empty();
       $('.activities label input').each(function() {
         $(this).removeAttr('disabled');
       });
+      $('#credit-card').show().find('input').removeClass('error');
+      $('#cc-num').prev().html(`Card Number:`);
+      $('#zip').prev().html(`Zip Code:`);
+      $('#cvv').prev().html(`CVV:`);
+      $('#paypal-message').hide();
+      $('#bitcoin-message').hide();
+      $('.error-message').remove();
       $('form').trigger('reset');
       window.scrollTo(0,0);
       $('#name').focus();
@@ -453,12 +508,27 @@ const submitForm = event => {
 }
 
 /**
+ * Displays an error message with the number of errors that need to be addressed.
+ * @param {integer} numberOfErrors - The number of errors in the form.
+ */
+const displaySubmitError = numberOfErrors => {
+  const hasError = $('.submit-error').length > 0;
+  if(numberOfErrors > 0) {
+    if(hasError) {
+      $('.submit-error').html(`<p class="submit-error">You must correct <strong>${numberOfErrors}</strong> ${numberOfErrors > 1 ? 'errors' : 'error'} before submitting.</p>`);
+      return;
+    }
+    $('button').after(`<p class="submit-error">You must correct <strong>${numberOfErrors}</strong> ${numberOfErrors > 1 ? 'errors' : 'error'} before submitting.</p>`);
+    return;
+  }
+}
+
+/**
  * Displays a success message when the form is submitted... successfully.
  */
 const displaySuccess = () => {
   const priceRegex = /(\$)\s(\d+\.\d{2})+/
   const total = $('#total-price').text().match(priceRegex)[2];
-  console.log(total);
   $('button').after(`<p class="success-message">Congrats! You're registered. <span class="small-message">Also, we charged you $${total}.</span></p>`);
   $('.success-message').hide().delay(200).slideDown();
 }
