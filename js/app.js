@@ -440,6 +440,8 @@ const submitForm = event => {
     setTimeout(function() {
       $('.success-message').remove();
       $('#total-price').remove();
+      $('#other-title-group').hide();
+      $('#shirt-colors').hide().find('#color').empty();
       $('.activities label input').each(function() {
         $(this).removeAttr('disabled');
       });
