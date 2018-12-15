@@ -439,6 +439,10 @@ const submitForm = event => {
     displaySuccess();
     setTimeout(function() {
       $('.success-message').remove();
+      $('#total-price').remove();
+      $('.activities label input').each(function() {
+        $(this).removeAttr('disabled');
+      });
       $('form').trigger('reset');
       window.scrollTo(0,0);
       $('#name').focus();
