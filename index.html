@@ -25,7 +25,7 @@
         <input type="text" id="name" name="user_name" required>
         
         <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user_email" pattern="\w+@\w+\.\w+" required>
+        <input type="email" id="mail" name="user_email" required>
         
         <label for="title">Job Role</label>
         <select id="title" name="user_title">
@@ -36,8 +36,10 @@
           <option value="student">Student</option>
           <option value="other">Other</option>
         </select>
-        <label for="other-title">Your Job Role</label>
-        <input type="text" name="user-title-other" id="other-title" placeholder="Your job role">
+        <div id="other-title-group">
+          <label for="other-title">Your Job Role</label>
+          <input type="text" name="user-title-other" id="other-title" placeholder="Your job role">
+        </div>
       </fieldset>
       
       <fieldset class="shirt">
@@ -148,9 +150,10 @@
         </div>
 
       </fieldset>
-        
-      <button type="submit">Register</button>
       
+      <div class="button-area">
+        <button type="submit">Register</button>
+      </div>
     </form>
 
 	</div>

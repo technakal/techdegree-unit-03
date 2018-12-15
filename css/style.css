@@ -135,6 +135,37 @@ button:hover {
 	margin-top: 1.25em;
 }
 
+.button-area {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.error {
+	border: 2px solid #D3343E;
+}
+
+.error-message {
+	color: #D3343E;
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: -15px;
+	padding: 0.5rem;
+}
+
+.success-message {
+	display: flex;
+	flex-flow: column;
+	font-size: 1.25rem;
+	margin: 1.25em 0 .5em;
+
+}
+
+.small-message {
+	font-size: 0.95rem;
+	font-style: italic;
+}
+
 /* ================================= 
   Helper Classes
 ==================================== */
