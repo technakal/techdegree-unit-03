@@ -39,12 +39,12 @@ $('document').ready(function() {
   $('#design').on('change', () => setShirtDesign());
   $('.activities').on('change', event => selectActivity(event.target));
   $('#payment').on('change', event => selectPaymentType(event));
-  $('#cc-num').attr('maxlength', 19).on('blur keyup', (event) => {
+  $('#cc-num').attr('maxlength', 16).on('blur keyup', (event) => {
     if(event.keyCode !== 9) {
       validateCreditCard()
     }
   });
-  $('#zip').on('blur keyup', (event) => {
+  $('#zip').attr('maxlength', 5).on('blur keyup', (event) => {
     if(event.keyCode !== 9) {
       validateZipCode()
     }
@@ -272,7 +272,7 @@ const validateActivitySelected = () => {
  */
 const validateCreditCard = () => {
   const { isEmpty, hasError } = runCommonValidation('cc-num');
-  const creditRegex = /\d{13,19}/i;
+  const creditRegex = /\d{13,16}/i;
   const isValid = creditRegex.test($('#cc-num').val());
   const message = isEmpty ? `REQUIRED` : `INVALID`;
   if(!isValid) {
@@ -292,7 +292,7 @@ const validateCreditCard = () => {
  */
 const validateZipCode = () => {
   const { isEmpty, hasError } = runCommonValidation('zip');
-  const zipRegex = /^\d{5}(-?\d{4})*$/i;
+  const zipRegex = /^\d{5}$/i;
   const isValid = zipRegex.test($('#zip').val());
   const message = isEmpty ? `REQUIRED` : `INVALID`;
   if(!isValid) {
