@@ -487,7 +487,10 @@ const submitForm = event => {
       $('.success-message').remove();
       $('#total-price').remove();
       $('#other-title-group').hide();
-      $('#design').prepend('<option value="default">Select Theme</option>');
+      $('#other-title').removeClass('error');
+      if($('#design option[value=default]').length == 0) {
+        $('#design').prepend('<option value="default">Select Theme</option>');
+      }
       $('#design option[value=default]').attr('selected', true);
       $('#shirt-colors').hide().find('#color').empty();
       $('.activities label input').each(function() {
