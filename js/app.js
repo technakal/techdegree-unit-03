@@ -54,6 +54,8 @@ $('document').ready(function() {
       validateCVV()
     }
   });
+  $('#exp-year').on('change', event => validateExpirationDate());
+  $('#exp-month').on('change', event => validateExpirationDate());
   $('form').submit(event => submitForm(event));
 });
 
